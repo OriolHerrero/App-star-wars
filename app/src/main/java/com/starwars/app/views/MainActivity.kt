@@ -1,4 +1,4 @@
-package com.example.starwarskenos.views
+package com.starwars.app.views
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,16 +9,20 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import com.example.starwarskenos.R
-import com.example.starwarskenos.databinding.ActivityMainBinding
+import androidx.lifecycle.ViewModelProvider
+import com.starwars.app.R
+import com.starwars.app.databinding.ActivityMainBinding
+import com.starwars.app.viewmodel.PlanetsViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private var viewModel: PlanetsViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[PlanetsViewModel::class.java]
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

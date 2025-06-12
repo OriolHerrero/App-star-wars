@@ -1,6 +1,6 @@
-package com.example.starwarskenos.dagger
+package com.starwars.app.dagger
 
-import com.google.firebase.appdistribution.gradle.ApiService
+import com.starwars.app.rest.ApiRepositorySW
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -9,13 +9,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class RetrofitModule(private val baseUrl: String) {
+class RetrofitModule {
 
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl("https://www.swapi.tech/api/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -23,7 +23,7 @@ class RetrofitModule(private val baseUrl: String) {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun providesApiRepositorySW(retrofit: Retrofit): ApiRepositorySW {
+        return retrofit.create(ApiRepositorySW::class.java)
     }
 }

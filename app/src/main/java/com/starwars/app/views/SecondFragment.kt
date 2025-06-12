@@ -1,4 +1,4 @@
-package com.example.starwarskenos.views
+package com.starwars.app.views
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.starwarskenos.R
-import com.example.starwarskenos.databinding.FragmentSecondBinding
+import com.starwars.app.R
+import com.starwars.app.databinding.FragmentSecondBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.

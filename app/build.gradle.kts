@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.starwarskenos"
+    namespace = "com.starwars.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.starwarskenos"
+        applicationId = "com.starwars.app"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

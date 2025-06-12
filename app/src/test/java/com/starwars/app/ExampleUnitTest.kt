@@ -1,4 +1,4 @@
-package com.example.starwarskenos
+package com.starwars.app
 
 import org.junit.Test
 
