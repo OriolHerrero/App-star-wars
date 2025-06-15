@@ -1,12 +1,13 @@
 package com.starwars.app.rest
 
+import retrofit2.Call
 import retrofit2.http.GET
 
 interface ApiRepositorySW {
 
     @GET("planets/")
-    fun planets(): Any
+    fun planets(): Call<Map<String, Any>>
 
-    @GET("people/")
-    fun people(): Any
+    @GET("vehicles/")
+    fun vehicles(): Call<Map<String, Any>>
 }

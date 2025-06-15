@@ -1,20 +1,20 @@
 package com.starwars.app.dagger
 
-import com.starwars.app.business.SWBusiness
-import com.starwars.app.business.SWBusinessImpl
-import com.starwars.app.rest.ApiRepositorySW
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.starwars.app.viewmodel.PlanetsViewModel
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
+import dagger.multibindings.IntoMap
 
 @Module
-class ViewModelModule {
+abstract class ViewModelModule {
+    @Binds
+    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 
-    @Provides
-    fun providesSWBusiness(apiRepositorySW: ApiRepositorySW): SWBusiness {
-        return SWBusinessImpl(apiRepositorySW)
-    }
+    @Binds
+    @IntoMap
+    @ViewModelKey(PlanetsViewModel::class)
+    abstract fun bindPlanetsViewModel(viewModel: PlanetsViewModel): ViewModel
 
-    @Provides
-    fun providesPlanetsViewModel(swBusiness: SWBusiness): PlanetsViewModel = PlanetsViewModel(swBusiness)
 }

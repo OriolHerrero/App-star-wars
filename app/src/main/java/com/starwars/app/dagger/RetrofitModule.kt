@@ -1,5 +1,7 @@
 package com.starwars.app.dagger
 
+import com.starwars.app.business.SWBusiness
+import com.starwars.app.business.SWBusinessImpl
 import com.starwars.app.rest.ApiRepositorySW
 import dagger.Module
 import dagger.Provides
@@ -10,6 +12,12 @@ import javax.inject.Singleton
 
 @Module
 class RetrofitModule {
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
+    }
 
     @Provides
     @Singleton
@@ -25,5 +33,10 @@ class RetrofitModule {
     @Singleton
     fun providesApiRepositorySW(retrofit: Retrofit): ApiRepositorySW {
         return retrofit.create(ApiRepositorySW::class.java)
+    }
+
+    @Provides
+    fun providesSWBusiness(apiRepositorySW: ApiRepositorySW): SWBusiness {
+        return SWBusinessImpl(apiRepositorySW)
     }
 }
