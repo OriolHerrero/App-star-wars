@@ -11,7 +11,7 @@ class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness): 
 
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val planetsJson = swBusiness.loadPlanets()
+            swBusiness.loadPlanets()
         }
     }
 }
