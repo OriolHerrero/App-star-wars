@@ -20,7 +20,9 @@ import javax.inject.Inject
 
 class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, private val application: Application): AndroidViewModel(application) {
 
-    private val PLANETS_LIST = "planetsList"
+    private val planetlist = "planetsList"
+    private val nextCall = "next"
+    private val previousCall = "previous"
 
     var planets: MutableList<Planet> = mutableListOf()
     private val _planetsUpdated = MutableLiveData<MutableList<Planet>>()
@@ -45,10 +47,10 @@ class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, p
     }
 
     fun loadMoreData() {
-        val url = StorageUtils.recoverObject<String>(application.applicationContext, "next")
-        val previousUrl = StorageUtils.recoverObject<String>(application.applicationContext, "previous")
+        val url = StorageUtils.recoverObject<String>(application.applicationContext, nextCall)
+        val previousUrl = StorageUtils.recoverObject<String>(application.applicationContext, previousCall)
         if (url?.isNotEmpty() == true && url != previousUrl) {
-            saveData("previous", url)
+            saveData(previousCall, url)
             viewModelScope.launch(Dispatchers.IO) {
                 val body = swBusiness.loadAdditionalPlanets(url)
                 parseData(body)
@@ -58,22 +60,19 @@ class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, p
 
     private fun parseData(body: PlanetListBody?) {
         body?.let {
-            it.next?.let { it1 -> saveData("next", it1) } ?: saveData("next", "")
+            it.next?.let { it1 -> saveData(nextCall, it1) } ?: saveData(nextCall, "")
             for (element in it.results) {
                 swBusiness.loadPlanet(element.url, object: Callback<SinglePlanetBody> {
                     override fun onResponse(call: Call<SinglePlanetBody>, response: Response<SinglePlanetBody>) {
                         response.body()?.result?.let { result ->
                             planets.add(Planet(result.uid, result.properties.name, result.properties.population, result.properties.diameter))
                             planets.sortBy { element-> element.id }
-                            saveData(PLANETS_LIST, planets)
+                            saveData(planetlist, planets)
                             _planetsUpdated.postValue(planets)
                         }
                     }
 
-                    override fun onFailure(call: Call<SinglePlanetBody>, t: Throwable) {
-                        //TODO
-                        val a = ""
-                    }
+                    override fun onFailure(call: Call<SinglePlanetBody>, t: Throwable) { }
                 })
             }
         }
@@ -84,7 +83,7 @@ class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, p
     }
 
     private fun restorePlanets(): MutableList<Planet> {
-        val obj = StorageUtils.recoverObject<MutableList<Planet>>(application.applicationContext, PLANETS_LIST)
+        val obj = StorageUtils.recoverObject<MutableList<Planet>>(application.applicationContext, planetlist)
         return obj ?: mutableListOf()
     }
 }
