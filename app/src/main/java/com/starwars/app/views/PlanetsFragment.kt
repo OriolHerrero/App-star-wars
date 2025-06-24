@@ -40,18 +40,19 @@ class PlanetsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        testButton?.setOnClickListener {
-            val res = viewModel.loadData()
+        viewModel.planetsUpdated.observe(viewLifecycleOwner) {
+            context?.let { context ->
+                recycler?.adapter = PlanetsAdapter(context, viewModel.planets)
+                recycler?.adapter?.notifyDataSetChanged()
+            }
         }
-        //TODO test
-        val a = mutableListOf<Planet>()
-        a.add(Planet(1, "Primer planeta", 4, 10000.0))
-        a.add(Planet(2, "Segon planeta", 16, 20000.0))
-        a.add(Planet(3, "Tercer planeta", 50, 200400.0))
-        //TODO
-        context?.let { context ->
+
+        context?.let {
             recycler?.layoutManager = LinearLayoutManager(context)
-            recycler?.adapter = PlanetsAdapter(context, a)
+        }
+
+        testButton?.setOnClickListener {
+            viewModel.loadData()
         }
     }
 }

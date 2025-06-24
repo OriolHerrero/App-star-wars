@@ -1,28 +1,23 @@
 package com.starwars.app.business
 
+import com.starwars.app.business.models.PlanetListBody
+import com.starwars.app.business.models.SinglePlanetBody
 import com.starwars.app.rest.ApiRepositorySW
-import retrofit2.Call
-import retrofit2.Response
+import retrofit2.Callback
 
 interface SWBusiness {
-    fun loadPlanets(): Any
+    fun loadPlanets(): PlanetListBody?
+    fun loadPlanet(url: String, callback: Callback<SinglePlanetBody>)
 }
 
 class SWBusinessImpl(private val apiRepositorySW: ApiRepositorySW): SWBusiness {
 
-    override fun loadPlanets(): Map<String, Any> {
-        var map: Map<String, Any> = emptyMap()
-        apiRepositorySW.planets().enqueue(object: retrofit2.Callback<Map<String, Any>> {
-            override fun onResponse(call: Call<Map<String, Any>>, response: Response<Map<String, Any>>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { map = it }
-                }
-            }
+    override fun loadPlanets(): PlanetListBody? {
+        val response = apiRepositorySW.planets().execute()
+        return response.body()
+    }
 
-            override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
-
-            }
-        })
-        return map
+    override fun loadPlanet(url: String, callback: Callback<SinglePlanetBody>) {
+        apiRepositorySW.planet(url).enqueue(callback)
     }
 }

@@ -12,7 +12,7 @@ class StarWarsApplication: Application() {
         super.onCreate()
 
         appComponent = DaggerApplicationComponent.builder()
-            .retrofitModule(RetrofitModule())
+            .retrofitModule(RetrofitModule(this))
             .build()
 
         appComponent.inject(this)

@@ -1,6 +1,6 @@
-package com.starwars.app.business
+package com.starwars.app.business.models
 
-data class PlanetBody(
+data class PlanetListBody(
     val message: String,
     val totalRecords: Double,
     val totalPages: Double,
@@ -11,3 +11,5 @@ data class PlanetBody(
     val timestamp: String,
     val support: Map<String, Any>,
     val social: Map<String, Any>)
+
+data class PlanetHeader(val uid: Int, val name: String, val url: String)

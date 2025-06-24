@@ -1,5 +1,7 @@
 package com.starwars.app.dagger
 
+import android.app.Application
+import android.content.Context
 import com.starwars.app.business.SWBusiness
 import com.starwars.app.business.SWBusinessImpl
 import com.starwars.app.rest.ApiRepositorySW
@@ -11,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class RetrofitModule {
+class RetrofitModule(private val application: Application) {
 
     @Provides
     @Singleton
@@ -39,4 +41,8 @@ class RetrofitModule {
     fun providesSWBusiness(apiRepositorySW: ApiRepositorySW): SWBusiness {
         return SWBusinessImpl(apiRepositorySW)
     }
+
+    @Provides
+    @Singleton
+    fun providesApplication(): Application = application
 }

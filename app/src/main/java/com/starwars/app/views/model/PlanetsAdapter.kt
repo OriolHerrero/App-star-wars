@@ -24,8 +24,9 @@ class PlanetsAdapter(private val context: Context, private val items: List<Plane
 
         fun setPlanet(context: Context, planet: Planet) {
             nameCell?.text = planet.name
-            inhabitantsCell?.text = context.getString(R.string.inhabitants, planet.inhabitants.toString())
-            diameterCell?.text = context.getString(R.string.diameter, planet.diameter.toString())
+            inhabitantsCell?.text = planet.inhabitants.toIntOrNull()?.let { inhabitants-> context.getString(R.string.inhabitants, inhabitants) } ?:
+                context.getString(R.string.inhabitants_unknown)
+            diameterCell?.text = context.getString(R.string.diameter, planet.diameter)
         }
     }
 
