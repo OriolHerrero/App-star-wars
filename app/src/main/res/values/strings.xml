@@ -9,5 +9,6 @@
 
     <string name="inhabitants">%1$d habitantes.</string>
     <string name="inhabitants_unknown">Cantidad de habitantes desconocida.</string>
-    <string name="diameter">%s km de diámetro.</string>
+    <string name="diameter">%1$d km de diámetro.</string>
+    <string name="diameter_unknown">Diámetro desconocido</string>
 </resources>

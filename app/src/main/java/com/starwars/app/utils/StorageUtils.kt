@@ -23,5 +23,11 @@ class StorageUtils {
             val type = object : TypeToken<T>() {}.type
             return Gson().fromJson(json, type)
         }
+
+        fun removeObject(context: Context, id: String) {
+            val sharedPreferences =
+                context.getSharedPreferences("PersistentData", Context.MODE_PRIVATE)
+            sharedPreferences.edit { remove(id) }
+        }
     }
 }

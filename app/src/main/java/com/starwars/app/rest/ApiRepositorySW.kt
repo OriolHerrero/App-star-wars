@@ -12,6 +12,9 @@ interface ApiRepositorySW {
     fun planets(): Call<PlanetListBody>
 
     @GET
+    fun additionalPlanets(@Url url: String): Call<PlanetListBody>
+
+    @GET
     fun planet(@Url url: String): Call<SinglePlanetBody>
 
     @GET("vehicles/")

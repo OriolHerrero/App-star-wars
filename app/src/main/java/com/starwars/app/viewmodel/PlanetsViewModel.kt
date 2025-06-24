@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.starwars.app.business.SWBusiness
+import com.starwars.app.business.models.PlanetListBody
 import com.starwars.app.business.models.SinglePlanetBody
 import com.starwars.app.utils.StorageUtils
 import com.starwars.app.views.model.Planet
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import javax.inject.Inject
 
 class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, private val application: Application): AndroidViewModel(application) {
@@ -27,34 +29,62 @@ class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, p
 
     fun loadData() {
         planets = restorePlanets()
-        viewModelScope.launch(Dispatchers.IO) {
-            val body = swBusiness.loadPlanets()
-            body?.let {
-                for (element in it.results) {
-                    swBusiness.loadPlanet(element.url, object: Callback<SinglePlanetBody> {
-                        override fun onResponse(call: Call<SinglePlanetBody>, response: Response<SinglePlanetBody>) {
-                            response.body()?.result?.let { result ->
-                                planets.add(Planet(result.uid, result.properties.name, result.properties.population, result.properties.diameter))
-                                planets.sortBy { element-> element.id }
-                                _planetsUpdated.postValue(planets)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<SinglePlanetBody>, t: Throwable) {
-                            val a = ""
-                        }
-                    })
+        if (planets.isEmpty()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val body = swBusiness.loadPlanets()
+                    parseData(body)
+                } catch (e: IOException) {
+                    _planetsUpdated.postValue(mutableListOf())
                 }
+
+            }
+        } else {
+            _planetsUpdated.postValue(planets)
+        }
+    }
+
+    fun loadMoreData() {
+        val url = StorageUtils.recoverObject<String>(application.applicationContext, "next")
+        val previousUrl = StorageUtils.recoverObject<String>(application.applicationContext, "previous")
+        if (url?.isNotEmpty() == true && url != previousUrl) {
+            saveData("previous", url)
+            viewModelScope.launch(Dispatchers.IO) {
+                val body = swBusiness.loadAdditionalPlanets(url)
+                parseData(body)
             }
         }
     }
 
-    fun savePlanets() {
-        StorageUtils.saveObject(application.applicationContext, PLANETS_LIST, planets)
+    private fun parseData(body: PlanetListBody?) {
+        body?.let {
+            it.next?.let { it1 -> saveData("next", it1) } ?: saveData("next", "")
+            for (element in it.results) {
+                swBusiness.loadPlanet(element.url, object: Callback<SinglePlanetBody> {
+                    override fun onResponse(call: Call<SinglePlanetBody>, response: Response<SinglePlanetBody>) {
+                        response.body()?.result?.let { result ->
+                            planets.add(Planet(result.uid, result.properties.name, result.properties.population, result.properties.diameter))
+                            planets.sortBy { element-> element.id }
+                            saveData(PLANETS_LIST, planets)
+                            _planetsUpdated.postValue(planets)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SinglePlanetBody>, t: Throwable) {
+                        //TODO
+                        val a = ""
+                    }
+                })
+            }
+        }
+    }
+
+    fun saveData(id: String, data: Any) {
+        StorageUtils.saveObject(application.applicationContext, id, data)
     }
 
     private fun restorePlanets(): MutableList<Planet> {
         val obj = StorageUtils.recoverObject<MutableList<Planet>>(application.applicationContext, PLANETS_LIST)
-        obj?.let { return it }?: return mutableListOf()
+        return obj ?: mutableListOf()
     }
 }

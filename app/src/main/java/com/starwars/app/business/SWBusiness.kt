@@ -7,6 +7,7 @@ import retrofit2.Callback
 
 interface SWBusiness {
     fun loadPlanets(): PlanetListBody?
+    fun loadAdditionalPlanets(url: String): PlanetListBody?
     fun loadPlanet(url: String, callback: Callback<SinglePlanetBody>)
 }
 
@@ -14,6 +15,11 @@ class SWBusinessImpl(private val apiRepositorySW: ApiRepositorySW): SWBusiness {
 
     override fun loadPlanets(): PlanetListBody? {
         val response = apiRepositorySW.planets().execute()
+        return response.body()
+    }
+
+    override fun loadAdditionalPlanets(url: String): PlanetListBody? {
+        val response = apiRepositorySW.additionalPlanets(url).execute()
         return response.body()
     }
 

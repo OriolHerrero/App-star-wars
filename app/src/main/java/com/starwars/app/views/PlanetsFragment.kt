@@ -1,5 +1,6 @@
 package com.starwars.app.views
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.starwars.app.R
 import com.starwars.app.base.BaseFragment
+import com.starwars.app.utils.StorageUtils
 import com.starwars.app.viewmodel.PlanetsViewModel
-import com.starwars.app.views.model.Planet
 import com.starwars.app.views.model.PlanetsAdapter
+import java.io.IOException
 import javax.inject.Inject
 
 
@@ -37,8 +40,11 @@ class PlanetsFragment : BaseFragment() {
         return view
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.loadData()
 
         viewModel.planetsUpdated.observe(viewLifecycleOwner) {
             context?.let { context ->
@@ -49,10 +55,27 @@ class PlanetsFragment : BaseFragment() {
 
         context?.let {
             recycler?.layoutManager = LinearLayoutManager(context)
+            recycler?.addOnScrollListener(object: OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    if (layoutManager.findFirstVisibleItemPosition() + layoutManager.childCount >= layoutManager.itemCount) {
+                        try {
+                            viewModel.loadMoreData()
+                        } catch (e: IOException) {
+                            recycler?.removeOnScrollListener(this)
+                        }
+                    }
+                }
+            })
         }
 
         testButton?.setOnClickListener {
-            viewModel.loadData()
+            context?.let { it1 ->
+                StorageUtils.removeObject(it1, "planetsList")
+                StorageUtils.removeObject(it1, "next")
+                StorageUtils.removeObject(it1, "previous")
+            }
         }
     }
 }
