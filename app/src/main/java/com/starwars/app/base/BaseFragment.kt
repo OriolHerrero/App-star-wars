@@ -15,5 +15,12 @@ abstract class BaseFragment: Fragment() {
         bindDaggerInjection()
     }
 
+    fun replaceFragment(fragment: Fragment, container: Int) {
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction?.replace(container, fragment, fragment.javaClass.simpleName)
+        transaction?.addToBackStack(fragment.javaClass.simpleName)
+        transaction?.commitAllowingStateLoss()
+    }
+
     abstract fun bindDaggerInjection()
 }
