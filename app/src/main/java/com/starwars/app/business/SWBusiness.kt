@@ -1,5 +1,6 @@
 package com.starwars.app.business
 
+import com.starwars.app.business.models.FilmListBody
 import com.starwars.app.business.models.PlanetListBody
 import com.starwars.app.business.models.SinglePlanetBody
 import com.starwars.app.rest.ApiRepositorySW
@@ -9,6 +10,8 @@ interface SWBusiness {
     fun loadPlanets(): PlanetListBody?
     fun loadAdditionalPlanets(url: String): PlanetListBody?
     fun loadPlanet(url: String, callback: Callback<SinglePlanetBody>)
+
+    fun loadFilms(): FilmListBody?
 }
 
 class SWBusinessImpl(private val apiRepositorySW: ApiRepositorySW): SWBusiness {
@@ -25,5 +28,10 @@ class SWBusinessImpl(private val apiRepositorySW: ApiRepositorySW): SWBusiness {
 
     override fun loadPlanet(url: String, callback: Callback<SinglePlanetBody>) {
         apiRepositorySW.planet(url).enqueue(callback)
+    }
+
+    override fun loadFilms(): FilmListBody? {
+        val response = apiRepositorySW.films().execute()
+        return response.body()
     }
 }

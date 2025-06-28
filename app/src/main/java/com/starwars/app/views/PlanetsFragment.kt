@@ -43,7 +43,7 @@ class PlanetsFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.planets_fragment, container, false)
-        recycler = view.findViewById(R.id.recycler)
+        recycler = view.findViewById(R.id.planet_recycler)
         testButton = view.findViewById(R.id.button_test)
         return view
     }
@@ -59,7 +59,7 @@ class PlanetsFragment : BaseFragment() {
         }
 
         context?.let {
-            recycler?.layoutManager = LinearLayoutManager(context)
+            recycler?.layoutManager = LinearLayoutManager(it)
             recycler?.addOnScrollListener(object: OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

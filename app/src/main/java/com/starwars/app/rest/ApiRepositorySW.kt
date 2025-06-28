@@ -1,5 +1,6 @@
 package com.starwars.app.rest
 
+import com.starwars.app.business.models.FilmListBody
 import com.starwars.app.business.models.PlanetListBody
 import com.starwars.app.business.models.SinglePlanetBody
 import retrofit2.Call
@@ -17,6 +18,6 @@ interface ApiRepositorySW {
     @GET
     fun planet(@Url url: String): Call<SinglePlanetBody>
 
-    @GET("vehicles/")
-    fun vehicles(): Call<Map<String, Any>>
+    @GET("films/")
+    fun films(): Call<FilmListBody>
 }

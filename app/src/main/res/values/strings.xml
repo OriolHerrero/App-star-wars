@@ -12,4 +12,7 @@
     <string name="inhabitants_unknown">Cantidad de habitantes desconocida.</string>
     <string name="diameter">%1$d km de diámetro.</string>
     <string name="diameter_unknown">Diámetro desconocido</string>
+    
+    <string name="film_count">Capítulo %1$d</string>
+    <string name="directed">Dirigida por %s</string>
 </resources>
