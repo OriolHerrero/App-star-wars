@@ -17,7 +17,7 @@ class FilmsAdapter(private val context: Context, private val items: List<Film>):
         private var directorCell: TextView? = null
 
         init {
-            titleCell = view.findViewById(R.id.name)
+            titleCell = view.findViewById(R.id.title)
             numberCell = view.findViewById(R.id.number)
             directorCell = view.findViewById(R.id.director)
         }

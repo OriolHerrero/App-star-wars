@@ -16,7 +16,7 @@ data class FilmProperties(
     val planets: MutableList<String>,
     val producer: String,
     val title: String,
-    val episode_id: Double,
+    val episode_id: Int,
     val director: String,
     val release_date: String,
     val opening_crawl: String,

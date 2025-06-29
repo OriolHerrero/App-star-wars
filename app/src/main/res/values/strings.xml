@@ -8,6 +8,8 @@
     <string name="previous">Previous</string>
 
     <string name="search">Buscar</string>
+    <string name="tab_planets">Planetas</string>
+    <string name="tab_films">Películas</string>
     <string name="inhabitants">%1$d habitantes.</string>
     <string name="inhabitants_unknown">Cantidad de habitantes desconocida.</string>
     <string name="diameter">%1$d km de diámetro.</string>

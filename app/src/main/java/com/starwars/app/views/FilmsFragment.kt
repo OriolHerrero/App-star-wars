@@ -1,5 +1,6 @@
 package com.starwars.app.views
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starwars.app.R
 import com.starwars.app.base.BaseFragment
 import com.starwars.app.viewmodel.FilmsViewModel
+import com.starwars.app.views.model.Film
 import com.starwars.app.views.model.FilmsAdapter
 import javax.inject.Inject
 
@@ -34,14 +36,18 @@ class FilmsFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.filmsUpdated.observe(viewLifecycleOwner) {
-
+        viewModel.filmsUpdated.observe(viewLifecycleOwner) { items ->
+            updateItemList(items)
         }
         viewModel.loadFilms()
+        context?.let { recycler?.layoutManager = LinearLayoutManager(it) }
+    }
 
-        context?.let {
-            recycler?.layoutManager = LinearLayoutManager(it)
-            recycler?.adapter = FilmsAdapter(it, viewModel.films)
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateItemList(items: MutableList<Film>) {
+        context?.let { context ->
+            recycler?.adapter = FilmsAdapter(context, items)
+            recycler?.adapter?.notifyDataSetChanged()
         }
     }
 }

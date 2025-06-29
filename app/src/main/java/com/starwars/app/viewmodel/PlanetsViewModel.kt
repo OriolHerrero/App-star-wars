@@ -1,10 +1,10 @@
 package com.starwars.app.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.starwars.app.base.BaseViewModel
 import com.starwars.app.business.SWBusiness
 import com.starwars.app.business.models.PlanetListBody
 import com.starwars.app.business.models.SinglePlanetBody
@@ -18,7 +18,7 @@ import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, private val application: Application): AndroidViewModel(application) {
+class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, private val application: Application): BaseViewModel(application) {
 
     private val planetlist = "planetsList"
     private val nextCall = "next"
@@ -76,10 +76,6 @@ class PlanetsViewModel @Inject constructor(private val swBusiness: SWBusiness, p
                 })
             }
         }
-    }
-
-    fun saveData(id: String, data: Any) {
-        StorageUtils.saveObject(application.applicationContext, id, data)
     }
 
     private fun restorePlanets(): MutableList<Planet> {

@@ -2,6 +2,7 @@ package com.starwars.app.dagger
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.starwars.app.viewmodel.FilmsViewModel
 import com.starwars.app.viewmodel.PlanetsViewModel
 import dagger.Binds
 import dagger.Module
@@ -16,5 +17,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PlanetsViewModel::class)
     abstract fun bindPlanetsViewModel(viewModel: PlanetsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FilmsViewModel::class)
+    abstract fun bindFilmsViewModel(viewModel: FilmsViewModel): ViewModel
 
 }

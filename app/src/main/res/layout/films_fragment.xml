@@ -6,6 +6,7 @@
     tools:context=".views.FilmsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:paddingTop="20dp"
         android:id="@+id/film_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
