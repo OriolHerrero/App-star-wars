@@ -1,7 +1,6 @@
 package com.starwars.app.dagger
 
 import android.app.Application
-import android.content.Context
 import com.starwars.app.business.SWBusiness
 import com.starwars.app.business.SWBusinessImpl
 import com.starwars.app.rest.ApiRepositorySW
