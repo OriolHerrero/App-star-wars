@@ -32,7 +32,7 @@ import javax.inject.Inject
 class PlanetsFragment : BaseFragment() {
 
     private var recycler: RecyclerView? = null
-    private var testButton: Button? = null
+    private var clearDataButton: Button? = null
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -44,7 +44,7 @@ class PlanetsFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.planets_fragment, container, false)
         recycler = view.findViewById(R.id.planet_recycler)
-        testButton = view.findViewById(R.id.button_test)
+        clearDataButton = view.findViewById(R.id.clear_data_button)
         return view
     }
 
@@ -58,8 +58,8 @@ class PlanetsFragment : BaseFragment() {
             updateItemList(viewModel.planets)
         }
 
-        context?.let {
-            recycler?.layoutManager = LinearLayoutManager(it)
+        context?.let { context ->
+            recycler?.layoutManager = LinearLayoutManager(context)
             recycler?.addOnScrollListener(object: OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
@@ -73,11 +73,9 @@ class PlanetsFragment : BaseFragment() {
                     }
                 }
             })
-        }
 
-        testButton?.setOnClickListener {
-            context?.let { it1 ->
-                StorageUtils.clearAllData(it1)
+            clearDataButton?.setOnClickListener {
+                StorageUtils.clearAllData(context)
             }
         }
     }

@@ -11,9 +11,10 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/button_test"
-            android:layout_width="40dp"
+            android:id="@+id/clear_data_button"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:text="Debug: eliminar datos persistentes"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
@@ -22,7 +23,7 @@
             android:id="@+id/planet_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/button_test"
+            app:layout_constraintTop_toBottomOf="@id/clear_data_button"
             android:layout_marginTop="20dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
