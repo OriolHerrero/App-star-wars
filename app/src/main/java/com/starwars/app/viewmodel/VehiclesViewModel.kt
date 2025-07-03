@@ -8,13 +8,13 @@ import com.starwars.app.base.BaseViewModel
 import com.starwars.app.business.SWBusiness
 import com.starwars.app.business.models.SingleVehicleBody
 import com.starwars.app.utils.StorageUtils
-import com.starwars.app.views.model.Planet
 import com.starwars.app.views.model.Vehicle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import javax.inject.Inject
 
 class VehiclesViewModel @Inject constructor(private val swBusiness: SWBusiness, private val application: Application): BaseViewModel(application) {
@@ -33,23 +33,27 @@ class VehiclesViewModel @Inject constructor(private val swBusiness: SWBusiness, 
                     _vehiclesUpdated.postValue(vehicles.groupBy { it2-> it2.vehicleClass })
                 } else {
                     viewModelScope.launch(Dispatchers.IO) {
-                        swBusiness.loadVehicle(element, object: Callback<SingleVehicleBody> {
-                            override fun onResponse(call: Call<SingleVehicleBody>, response: Response<SingleVehicleBody>) {
-                                response.body()?.let { body ->
-                                    val identifier = body.result.uid
-                                    body.result.properties.let {
-                                        val v = Vehicle(identifier, it.name, it.vehicle_class, it.cargo_capacity, it.max_atmosphering_speed)
-                                        vehicles.add(v)
-                                        saveData("vehicle$identifier", v)
+                        try {
+                            swBusiness.loadVehicle(element, object: Callback<SingleVehicleBody> {
+                                override fun onResponse(call: Call<SingleVehicleBody>, response: Response<SingleVehicleBody>) {
+                                    response.body()?.let { body ->
+                                        val identifier = body.result.uid
+                                        body.result.properties.let {
+                                            val v = Vehicle(identifier, it.name, it.vehicle_class, it.cargo_capacity, it.max_atmosphering_speed)
+                                            vehicles.add(v)
+                                            saveData("vehicle$identifier", v)
+                                        }
+                                        _vehiclesUpdated.postValue(vehicles.groupBy { it2-> it2.vehicleClass })
                                     }
-                                    _vehiclesUpdated.postValue(vehicles.groupBy { it2-> it2.vehicleClass })
                                 }
-                            }
 
-                            override fun onFailure(call: Call<SingleVehicleBody>, t: Throwable) {
-                                _vehiclesUpdated.postValue(emptyMap())
-                            }
-                        })
+                                override fun onFailure(call: Call<SingleVehicleBody>, t: Throwable) {
+                                    _vehiclesUpdated.postValue(emptyMap())
+                                }
+                            })
+                        } catch (e: IOException) {
+                            _vehiclesUpdated.postValue(vehicles.groupBy { it2-> it2.vehicleClass })
+                        }
                     }
                 }
             }
