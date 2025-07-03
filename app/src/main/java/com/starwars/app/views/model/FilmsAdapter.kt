@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.starwars.app.R
 
-class FilmsAdapter(private val context: Context, private val items: List<Film>): RecyclerView.Adapter<FilmsAdapter.FilmsViewHolder>() {
+class FilmsAdapter(private val context: Context, private val items: List<Film>, private val listener: ItemClickedListener):
+    RecyclerView.Adapter<FilmsAdapter.FilmsViewHolder>() {
 
     class FilmsViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
@@ -38,5 +39,10 @@ class FilmsAdapter(private val context: Context, private val items: List<Film>):
 
     override fun onBindViewHolder(holder: FilmsViewHolder, position: Int) {
         holder.setFilm(context, items[position])
+        holder.itemView.setOnClickListener { listener.onItemClick(items[position]) }
+    }
+
+    interface ItemClickedListener {
+        fun onItemClick(film: Film)
     }
 }

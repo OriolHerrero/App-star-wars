@@ -17,7 +17,7 @@ class FilmsViewModel @Inject constructor(private val swBusiness: SWBusiness, pri
 
     private val filmslist = "filmslist"
 
-    var films: MutableList<Film> = mutableListOf()
+    private var films: MutableList<Film> = mutableListOf()
     private val _filmsUpdated = MutableLiveData<MutableList<Film>>()
     val filmsUpdated: LiveData<MutableList<Film>> get() = _filmsUpdated
     
@@ -29,7 +29,8 @@ class FilmsViewModel @Inject constructor(private val swBusiness: SWBusiness, pri
                     val body = swBusiness.loadFilms()
                     body?.let {
                         for (element in it.result) {
-                            films.add(Film(element.uid, element.properties.title, element.properties.episode_id, element.properties.director))
+                            films.add(Film(element.uid, element.properties.title, element.properties.episode_id,
+                                element.properties.director, element.properties.vehicles))
                         }
                         saveData(filmslist, films)
                         _filmsUpdated.postValue(films)

@@ -29,5 +29,11 @@ class StorageUtils {
                 context.getSharedPreferences("PersistentData", Context.MODE_PRIVATE)
             sharedPreferences.edit { remove(id) }
         }
+
+        fun clearAllData(context: Context) {
+            val sharedPreferences =
+                context.getSharedPreferences("PersistentData", Context.MODE_PRIVATE)
+            sharedPreferences.edit{ clear() }
+        }
     }
 }

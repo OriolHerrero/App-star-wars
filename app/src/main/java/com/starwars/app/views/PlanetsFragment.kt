@@ -77,10 +77,7 @@ class PlanetsFragment : BaseFragment() {
 
         testButton?.setOnClickListener {
             context?.let { it1 ->
-                StorageUtils.removeObject(it1, "planetsList")
-                StorageUtils.removeObject(it1, "next")
-                StorageUtils.removeObject(it1, "previous")
-                StorageUtils.removeObject(it1, "filmslist")
+                StorageUtils.clearAllData(it1)
             }
         }
     }
